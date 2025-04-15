@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Travel Blog - VentureVista{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+<section class="py-5">
+    <div class="container-fluid">
+        <h1 class="text-center fw-bold mb-4 text-primary">🌍 Travel Blog</h1>
+
+        <div class="container-fluid px-2">
+            <div class="d-flex overflow-auto flex-nowrap gap-2 mb-4 bg-theme p-2 rounded shadow-sm" id="blogPills">
+                <ul class="nav nav-pills">
+                    {% for category in categories.keys %}
+                    <li class="nav-item">
+                        <a class="nav-link fw-semibold px-4 py-2 {% if forloop.first %}active{% endif %}" 
+                           data-bs-toggle="pill" 
+                           href="#pill-{{ category|slugify }}">
+                            {{ category }}
+                        </a>                
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+
+        <div class="tab-content" id="blogPillsContent">
+            {% for category, posts in categories.items %}
+            <div class="tab-pane fade {% if forloop.first %}show active{% endif %}" id="pill-{{ category|slugify }}">
+                <h2 class="text-center text-primary mb-4">{{ category }}</h2>
+
+                <div class="container-fluid">
+                    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                        {% for post in posts %}
+                        <div class="col">
+                            <div class="card h-100 shadow-sm border-0 rounded-3 overflow-hidden">
+                                {% if post.image %}
+                                <img src="{{ post.image.url }}" class="card-img-top" alt="{{ post.title }}"
+                                     style="height: 200px; object-fit: cover;">
+                                {% else %}
+                                <img src="{% static 'images/default-placeholder.png' %}" class="card-img-top"
+                                     alt="No Image Available" style="height: 200px; object-fit: cover;">
+                                {% endif %}
+                                <div class="card-body d-flex flex-column">
+                                    <h5 class="card-title fw-bold">{{ post.title }}</h5>
+                                    <p class="card-text text-theme flex-grow-1">{{ post.content|truncatewords:20 }}</p>
+                                    <p class="small text-secondary">
+                                        ✍ By <strong>{{ post.author.username|default:"Guest" }}</strong> | 📅 {{ post.created_at|date:"M d, Y" }}
+                                    </p>
+                                    <div class="mt-auto">
+                                        <a href="{% url 'blog:blog_detail' post.id %}" 
+                                           class="btn btn-primary btn-sm fw-semibold">
+                                            Read More →
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}            
+        </div>
+    </div>
+</section>
+
+<script src="{% static 'js/script.js' %}"></script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const firstTab = document.querySelector('#blogPills .nav-link');
+    if (firstTab) {
+      document.querySelectorAll('#blogPills .nav-link').forEach(el => el.classList.remove('active'));
+      firstTab.classList.add('active');
+      const tabTrigger = new bootstrap.Tab(firstTab);
+      tabTrigger.show();
+    }
+  });
+</script>
+
+{% endblock %}

@@ -1,0 +1,188 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Book Your Trip - VentureVista{% endblock %}
+
+{% block content %}
+<style>
+    .swap-btn {
+        font-size: 1.2rem;
+        border-radius: 50%;
+        transition: transform 0.3s ease-in-out, background-color 0.3s;
+    }
+
+    .swap-btn.rotate {
+        transform: rotate(180deg);
+    }
+</style>
+
+<div class="container my-5">
+    <h2 class="text-center fw-bold text-primary">Book Your Trip</h2>
+
+    <!-- Booking Tabs -->
+    <div class="container-fluid px-3">
+        <div class="d-flex overflow-auto justify-content-center gap-2 mt-4 flex-nowrap">
+            <ul class="nav nav-pills" id="bookingTabs" role="tablist">
+                {% for name, label in tabs %}
+                <li class="nav-item flex-fill text-center">
+                    <a class="nav-link {% if forloop.first %}active{% endif %} d-flex align-items-center justify-content-center gap-2 rounded-pill px-4 py-2 shadow-sm w-100"
+                       id="{{ label }}-tab" data-bs-toggle="tab" data-bs-target="#{{ label }}" role="tab">
+                        {% if label == "flights" %}✈️{% elif label == "hotels" %}🏨{% elif label == "homestays" %}🏠{% else %}🌍{% endif %}
+                        {{ name }}
+                    </a>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <!-- Booking Forms -->
+    <div class="tab-content mt-4">
+        <!-- Flights -->
+        <div class="tab-pane fade show active" id="flights" role="tabpanel">
+            <form method="GET" action="{% url 'booking:book_flight' %}">
+                <div class="row gx-3">
+                    <div class="col-md-5 mb-3">
+                        <div class="form-floating">
+                            <input type="text" class="form-control" id="departure" name="departure" placeholder="From" required>
+                            <label for="departure">From</label>
+                        </div>
+                    </div>
+                    <div class="col-md-2 d-flex align-items-center justify-content-center my-2">
+                        <button type="button" class="btn swap-btn" id="swapLocations" aria-label="Swap locations">
+                            <i class="fas fa-arrows-rotate"></i>
+                        </button>
+                    </div>
+                    <div class="col-md-5 mb-3">
+                        <div class="form-floating">
+                            <input type="text" class="form-control" id="destination" name="destination" placeholder="To" required>
+                            <label for="destination">To</label>
+                        </div>
+                    </div>
+                    <div class="col-md-5 mb-3">
+                        <div class="form-floating">
+                            <input type="date" class="form-control" name="departureDate" required>
+                            <label>Departure Date</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center mt-3">
+                    <button type="submit" class="btn btn-primary px-5">Search Flights</button>
+                </div>                
+            </form>
+        </div>
+
+        <!-- Hotels -->
+        <div class="tab-pane fade" id="hotels" role="tabpanel">
+            <form method="GET" action="{% url 'booking:book_hotel' %}">
+                <div class="row gx-3">
+                    <div class="col-md-6 mb-3">
+                        <div class="form-floating">
+                            <input type="text" class="form-control" name="hotelLocation" placeholder="Destination" required>
+                            <label>Destination</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="form-floating">
+                            <input type="date" class="form-control" name="hotelStartDate" required>
+                            <label>Check-in</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="form-floating">
+                            <input type="date" class="form-control" name="hotelEndDate" required>
+                            <label>Check-out</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center mt-3">
+                    <button type="submit" class="btn btn-primary px-5">Search Hotels</button>
+                </div>                
+            </form>
+        </div>
+
+        <!-- Homestays -->
+        <div class="tab-pane fade" id="homestays" role="tabpanel">
+            <form method="GET" action="{% url 'booking:book_homestay' %}">
+                <div class="row gx-3">
+                    <div class="col-md-6 mb-3">
+                        <div class="form-floating">
+                            <input type="text" class="form-control" name="homestayLocation" placeholder="Destination" required>
+                            <label>Destination</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="form-floating">
+                            <input type="number" class="form-control" name="guests" placeholder="Guests" min="1" required>
+                            <label>Guests</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center mt-3">
+                    <button type="submit" class="btn btn-primary px-5">Search Homestays</button>
+                </div>                
+            </form>
+        </div>
+
+        <!-- Packages -->
+        <div class="tab-pane fade" id="packages" role="tabpanel">
+            <form method="GET" action="{% url 'booking:book_package' %}">
+                <div class="row gx-3">
+                    <div class="col-md-6 mb-3">
+                        <div class="form-floating">
+                            <input type="text" class="form-control" name="packageDestination" placeholder="Destination" required>
+                            <label>Destination</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="form-floating">
+                            <input type="date" class="form-control" name="packageStartDate" required>
+                            <label>Start Date</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="form-floating">
+                            <input type="date" class="form-control" name="packageEndDate" required>
+                            <label>End Date</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center mt-3">
+                    <button type="submit" class="btn btn-primary px-5">Search Packages</button>
+                </div>                
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    const swapBtn = document.getElementById('swapLocations');
+    const fromInput = document.getElementById('departure');
+    const toInput = document.getElementById('destination');
+
+    swapBtn.addEventListener('click', () => {
+        [fromInput.value, toInput.value] = [toInput.value, fromInput.value];
+        swapBtn.classList.toggle('rotate');
+    });
+
+    const hotelCheckIn = document.querySelector('input[name="hotelStartDate"]');
+    const hotelCheckOut = document.querySelector('input[name="hotelEndDate"]');
+    if (hotelCheckIn && hotelCheckOut) {
+        hotelCheckIn.addEventListener('change', () => {
+            const date = new Date(hotelCheckIn.value);
+            date.setDate(date.getDate() + 1);
+            hotelCheckOut.value = date.toISOString().split('T')[0];
+        });
+    }
+
+    const packageStart = document.querySelector('input[name="packageStartDate"]');
+    const packageEnd = document.querySelector('input[name="packageEndDate"]');
+    if (packageStart && packageEnd) {
+        packageStart.addEventListener('change', () => {
+            const date = new Date(packageStart.value);
+            date.setDate(date.getDate() + 3);
+            packageEnd.value = date.toISOString().split('T')[0];
+        });
+    }
+</script>
+{% endblock %}

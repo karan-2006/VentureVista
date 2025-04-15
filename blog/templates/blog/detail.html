@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+<div class="container-fluid py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-10 col-md-12">
+            <article class="card shadow-sm border-0 rounded-3 overflow-hidden">
+                {% if post.image %}
+                <img src="{{ post.image.url }}" class="card-img-top rounded-bottom shadow-sm" 
+                     alt="{{ post.title }}" width="100%" style="max-height: 400px; object-fit: cover;">
+                {% endif %}
+                <div class="card-body p-4">
+                    <h1 class="card-title text-primary fw-bold">{{ post.title }}</h1>
+                    <p class="text-theme mb-1">✍ By <strong>{{ post.author.username|default:"Guest" }}</strong></p>
+                    <p class="text-muted small"><i class="far fa-calendar-alt"></i> Published on: {{ post.created_at|date:"M d, Y" }}</p>
+                    
+                    <hr class="my-3">
+
+                    <div class="card-text text-theme lead fs-5">{{ post.description }}</div>
+
+                    <a href="{% url 'blog:blog' %}" class="btn btn-primary mt-4 px-4 py-2 fw-semibold shadow-sm back-btn">
+                        <i class="fas fa-arrow-left"></i> Back to Blog
+                    </a>
+                </div>
+            </article>
+        </div>
+    </div>
+</div>
+
+<script src="{% static 'js/script.js' %}"></script>
+
+<style>
+    .back-btn:hover {
+        background-color: #0d6efd !important;
+        opacity: 0.85;
+    }
+</style>
+{% endblock %}

@@ -1,0 +1,132 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    .table-hover tbody tr:hover {
+        background-color: rgba(0, 123, 255, 0.1);
+        transition: background-color 0.3s ease;
+    }
+
+    .btn-primary {
+        transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .btn-primary:hover {
+        background-color: #004494;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    }
+
+    .table-responsive {
+        overflow-x: auto;
+    }
+
+    .table th, .table td {
+        text-align: center;
+        vertical-align: middle;
+        padding: 12px;
+    }
+
+    .table th {
+        background-color: #007bff;
+        color: white;
+    }
+
+    .table-striped tbody tr:nth-of-type(odd) {
+        background-color: rgba(0, 123, 255, 0.05);
+    }
+
+    .table-bordered {
+        border-color: gray;
+    }
+
+    .back-btn {
+        transition: all 0.2s ease-in-out;
+    }
+
+    .back-btn:hover {
+        background-color: #0d6efd;
+        color: #fff !important;
+        transform: translateY(-2px);
+    }
+
+    @media (max-width: 576px) {
+        .back-btn span {
+            display: none;
+        }
+    }
+
+    .hotel-card {
+        border: 1px solid #dee2e6;
+        border-radius: 0.5rem;
+        padding: 1rem;
+        margin-bottom: 1rem;
+        box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    }
+
+    .hotel-card h5 {
+        font-size: 1.2rem;
+        color: #0d6efd;
+        font-weight: 600;
+    }
+</style>
+
+<div class="container mt-4">
+    <div class="mb-3">
+        <a href="javascript:history.back()" class="btn btn-outline-primary d-inline-flex align-items-center gap-1 shadow-sm px-3 py-2 rounded-3 back-btn">
+            <i class="bi bi-arrow-left-circle-fill fs-5"></i>
+            <span class="fw-semibold">Back</span>
+        </a>
+    </div>
+
+    <h3 class="text-center fw-bold text-primary">Available Hotels</h3>
+
+    {% if hotels %}
+    <div class="table-responsive d-none d-md-block">
+        <table class="table table-bordered table-striped table-hover shadow-sm">
+            <thead class="table-primary">
+                <tr>
+                    <th>Name</th>
+                    <th>Location</th>
+                    <th>Check-in</th>
+                    <th>Check-out</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for hotel in hotels %}
+                <tr>
+                    <td class="fw-semibold">{{ hotel.name }}</td>
+                    <td>{{ hotel.location }}</td>
+                    <td>{{ hotel.check_in }}</td>
+                    <td>{{ hotel.check_out }}</td>
+                    <td>
+                        <a href="{% url 'booking:confirm_hotel_booking' hotel.id %}" class="btn btn-primary btn-sm shadow-sm">
+                            Book Now
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="d-block d-md-none">
+        {% for hotel in hotels %}
+        <div class="hotel-card">
+            <h5>{{ hotel.name }}</h5>
+            <p><strong>Location:</strong> {{ hotel.location }}</p>
+            <p><strong>Check-in:</strong> {{ hotel.check_in }}</p>
+            <p><strong>Check-out:</strong> {{ hotel.check_out }}</p>
+            <a href="{% url 'booking:confirm_hotel_booking' hotel.id %}" class="btn btn-primary btn-sm shadow-sm">
+                Book Now
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+
+    {% else %}
+    <p class="text-center text-secondary fw-semibold">No hotels available for the selected criteria.</p>
+    {% endif %}
+</div>
+{% endblock %}

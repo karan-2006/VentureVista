@@ -1,0 +1,60 @@
+:root {
+    --bg-color: #ffffff;
+    --text-color: #212529;
+    --card-bg: rgba(0, 0, 0, 0.6);
+    --btn-bg-light: #ffffff;
+    --btn-bg-success: #28a745;
+    --btn-text: #000;
+}
+
+.dark-mode {
+    --bg-color: #121212;
+    --text-color: #e0e0e0;
+    --card-bg: rgba(0, 0, 0, 0.8);
+    --btn-bg-light: #f8f9fa;
+    --btn-bg-success: #198754;
+    --btn-text: #000;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    transition: all 0.3s ease-in-out;
+}
+
+.card {
+    overflow: hidden;
+    border-radius: 15px;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.15);
+}
+
+.card-img-overlay {
+    background-color: var(--card-bg);
+    padding: 20px;
+    border-radius: 15px;
+    transition: background 0.3s ease-in-out;
+}
+
+.btn-light {
+    background-color: var(--btn-bg-light);
+    color: var(--btn-text);
+    transition: all 0.3s ease-in-out;
+}
+
+.btn-light:hover {
+    background-color: #f1f1f1;
+}
+
+.btn-success {
+    background-color: var(--btn-bg-success);
+    transition: all 0.3s ease-in-out;
+}
+
+.btn-success:hover {
+    background-color: #1c7c3a;
+}

@@ -1,0 +1,101 @@
+/* Light Mode Styles */
+body {
+    background-color: #ffffff;
+    color: #000000;
+}
+
+.navbar-nav .nav-link {
+    font-size: 1rem;
+    font-weight: 500;
+    padding: 10px 15px;
+}
+
+.navbar-brand {
+    font-size: 1.5rem;
+}
+
+.nav-item .btn-primary {
+    font-size: 1rem;
+}
+
+.profile-img {
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+}
+
+footer {
+    background: #222;
+    padding: 20px 0;
+}
+
+footer p,
+footer a {
+    color: #bbb;
+    font-size: 14px;
+}
+
+footer a:hover {
+    color: #fff;
+}
+
+.text-theme {
+    color: black !important;
+}
+
+textarea::placeholder {
+    color: rgba(0, 0, 0, 0.5);
+}
+
+/* Dark Mode Styles */
+body {
+    background-color: #121212;
+    color: #f8f9fa;
+}
+
+.text-theme {
+    color: white !important;
+}
+
+textarea {
+    color: white !important;
+    background-color: transparent !important;
+    border-color: rgba(255, 255, 255, 0.5) !important;
+}
+
+textarea::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.navbar {
+    background-color: #222;
+}
+
+.container,
+.card,
+.blog-post,
+.booking-form {
+    background-color: #1e1e1e;
+    color: #f8f9fa;
+    border: 1px solid #444;
+}
+
+a {
+    color: white;
+}
+
+a:hover {
+    color: ghostwhite;
+}
+
+.dropdown-menu {
+    background-color: #333;
+}
+
+.dropdown-item {
+    color: #ddd;
+}
+
+.dropdown-item:hover {
+    background-color: #444;
+}

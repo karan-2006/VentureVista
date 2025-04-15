@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ destination.name }} - Details{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="card shadow-lg border-0 rounded-4 overflow-hidden dark-mode-card">
+        <div class="row g-0 flex-column flex-md-row">
+
+            <div class="col-12 col-md-6">
+                <div class="h-100 w-100">
+                    {% if destination.image %}
+                        <img src="{{ destination.image.url }}" 
+                             class="img-fluid w-100 h-100 object-fit-cover rounded-top rounded-md-start" 
+                             alt="{{ destination.name }}">
+                    {% else %}
+                        <img src="{% static 'default.jpg' %}" 
+                             class="img-fluid w-100 h-100 object-fit-cover rounded-top rounded-md-start" 
+                             alt="Default Image">
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="col-12 col-md-6 d-flex align-items-center dark-mode">
+                <div class="card-body p-4 p-md-5">
+                    <h2 class="fw-bold text-primary">{{ destination.name }}</h2>
+                    <p class="text-muted">{{ destination.description }}</p>
+
+                    <div class="d-flex align-items-center mb-3 flex-wrap">
+                        <h4 class="text-success fw-bold me-3">💰 ${{ destination.price }}</h4>
+                        <span class="badge bg-warning text-dark px-3 py-2 shadow-sm">✨ Popular Destination</span>
+                    </div>
+
+                    <div class="mt-4 d-flex flex-wrap gap-3">
+                        <a href="{% url 'destinations:confirm_destination_booking' destination.id %}" class="btn btn-primary">Book Now</a>
+                        <a href="{% url 'destinations:destinations' %}" class="btn btn-outline-danger">⬅ Back to Destinations</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<style>
+    .object-fit-cover {
+        object-fit: cover;
+    }
+
+    .dark-mode {
+        background-color: #1e1e1e;
+        color: #f1f1f1;
+    }
+
+    .dark-mode-card {
+        background-color: var(--card-bg-light, #fff);
+        color: var(--text-color-light, #212529);
+    }
+
+    .btn-primary {
+        background-color: var(--btn-primary-bg, #007bff);
+        border: none;
+        transition: 0.3s ease-in-out;
+    }
+
+    .btn-primary:hover {
+        background-color: var(--btn-primary-hover, #0056b3);
+    }
+
+    .badge {
+        font-size: 0.9rem;
+        font-weight: bold;
+    }
+</style>
+{% endblock %}

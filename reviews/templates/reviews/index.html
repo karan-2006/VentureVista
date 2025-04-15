@@ -1,0 +1,159 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Reviews - VentureVista{% endblock %}
+
+{% block content %}
+<div class="container-fluid my-5">
+    <h2 class="text-center text-primary fw-bold">🌟 Traveler Reviews</h2>
+
+    <div class="text-center mb-4">
+        <a href="{% url 'reviews:add_review' %}" class="btn btn-success fw-semibold px-4 py-2 shadow-sm">
+            ➕ Add a Review
+        </a>
+    </div>
+
+    <form method="GET" class="d-flex flex-wrap gap-3 justify-content-center my-4">
+        <select name="destination" class="form-select bg-light border-primary text-dark w-auto shadow-sm">
+            <option value="">📍 All Destinations</option>
+            {% for destination in destinations %}
+                <option value="{{ destination.id }}"
+                    {% if request.GET.destination == destination.id|stringformat:"s" %}selected{% endif %}>
+                    {{ destination.name }}
+                </option>
+            {% endfor %}
+        </select>
+
+        <select name="rating" class="form-select bg-light border-primary text-dark w-auto shadow-sm">
+            <option value="">⭐ All Ratings</option>
+            {% for i in "12345"|make_list %}
+                <option value="{{ i }}"
+                    {% if request.GET.rating == i|stringformat:"s" %}selected{% endif %}>
+                    {{ i }} ★
+                </option>
+            {% endfor %}
+        </select>
+
+        <button type="submit" class="btn btn-primary shadow-sm px-4">🔍 Filter</button>
+    </form>
+
+    <section class="row">
+        {% if reviews %}
+            {% for review in reviews %}
+                <div class="col-12 mb-4">
+                    <div class="card shadow-sm border-0 rounded-4 p-4 review-card">
+                        <h3 class="text-primary fw-bold">{{ review.destination.name }}</h3>
+                        <p class="mb-2">
+                            <strong class="text-secondary">
+                                {% if review.anonymous_user %}
+                                    {{ review.anonymous_user }}
+                                {% else %}
+                                    {{ review.user.username }}
+                                {% endif %}
+                            </strong> says:
+                        </p>
+                        <p class="rating text-warning fs-5">
+                            {% for _ in "12345"|make_list|slice:review.rating %}★{% endfor %}
+                        </p>
+                        <blockquote class="blockquote fst-italic text-theme">{{ review.comment }}</blockquote>
+                        <p class="text-secondary">
+                            <i class="far fa-calendar-alt"></i> {{ review.created_at|date:"F d, Y" }}
+                        </p>
+
+                        <div class="d-flex gap-2">
+                            <button class="btn btn-outline-success like-btn shadow-sm" data-review-id="{{ review.id }}">
+                                ❤️ <span class="like-count">{{ review.likes }}</span>
+                            </button>
+
+                            {% if review.user and review.user == request.user %}
+                                <a href="{% url 'reviews:delete_review' review.id %}" class="btn btn-outline-danger shadow-sm" onclick="return confirm('Are you sure you want to delete this review?');">
+                                    🗑 Delete
+                                </a>
+                                <a href="{% url 'reviews:edit_review' review.id %}" class="btn btn-outline-warning shadow-sm">
+                                    ✏️ Edit
+                                </a>
+                            {% elif review.anonymous_user and review.id in request.session.anonymous_reviews %}
+                                <a href="{% url 'reviews:delete_review' review.id %}" class="btn btn-outline-danger shadow-sm" onclick="return confirm('Are you sure you want to delete this review?');">
+                                    🗑 Delete
+                                </a>
+                                <a href="{% url 'reviews:edit_review' review.id %}" class="btn btn-outline-warning shadow-sm">
+                                    ✏️ Edit
+                                </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="col-12 text-center">
+                <p class="text-secondary">No reviews yet. Be the first to share your experience! 🌟</p>
+            </div>
+        {% endif %}
+    </section>
+
+    <div class="d-flex justify-content-center align-items-center mt-4">
+        {% if reviews.has_previous %}
+            <a href="?page=1{% if request.GET.destination %}&destination={{ request.GET.destination }}{% endif %}{% if request.GET.rating %}&rating={{ request.GET.rating }}{% endif %}" class="btn btn-outline-primary px-3 py-2">⏮ First</a>
+            <a href="?page={{ reviews.previous_page_number }}{% if request.GET.destination %}&destination={{ request.GET.destination }}{% endif %}{% if request.GET.rating %}&rating={{ request.GET.rating }}{% endif %}" class="btn btn-outline-primary px-3 py-2">⬅ Prev</a>
+        {% endif %}
+
+        <span class="mx-3 fw-semibold">Page {{ reviews.number }} of {{ reviews.paginator.num_pages }}</span>
+
+        {% if reviews.has_next %}
+            <a href="?page={{ reviews.next_page_number }}{% if request.GET.destination %}&destination={{ request.GET.destination }}{% endif %}{% if request.GET.rating %}&rating={{ request.GET.rating }}{% endif %}" class="btn btn-outline-primary px-3 py-2">Next ➡</a>
+            <a href="?page={{ reviews.paginator.num_pages }}{% if request.GET.destination %}&destination={{ request.GET.destination }}{% endif %}{% if request.GET.rating %}&rating={{ request.GET.rating }}{% endif %}" class="btn btn-outline-primary px-3 py-2">Last ⏭</a>
+        {% endif %}
+    </div>
+</div>
+
+<style>
+    .like-btn {
+        transition: transform 0.2s ease-in-out;
+    }
+
+    .like-btn:active {
+        transform: scale(1.2);
+    }
+
+    .review-card {
+        transition: transform 0.2s ease-in-out;
+    }
+
+    .review-card:hover {
+        transform: translateY(-5px);
+    }
+</style>
+
+<script>
+    document.querySelectorAll('.like-btn').forEach(button => {
+        button.addEventListener('click', function () {
+            const reviewId = this.getAttribute('data-review-id');
+            const likeCount = this.querySelector('.like-count');
+
+            fetch(`/reviews/like/${reviewId}/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({})
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    likeCount.textContent = data.likes;
+                    this.classList.add('btn-success');
+                    this.setAttribute("disabled", true);
+                    this.innerHTML = '❤️' + data.likes;
+                    this.style.transition = 'transform 0.3s ease';
+                    this.style.transform = 'scale(1.1)';
+                    setTimeout(() => {
+                        this.style.transform = 'scale(1)';
+                    }, 300);
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    });
+</script>
+{% endblock %}

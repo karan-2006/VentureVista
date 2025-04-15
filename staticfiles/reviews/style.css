@@ -1,0 +1,103 @@
+/* Base Styling */
+body {
+    background-color: #f8f9fa;
+    font-family: Arial, sans-serif;
+}
+
+.container {
+    max-width: 800px;
+}
+
+/* Headings */
+h2 {
+    color: #007bff;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* Review Section */
+.reviews {
+    margin-top: 20px;
+}
+
+.review {
+    border-left: 5px solid #007bff;
+    padding: 15px;
+    margin-bottom: 15px;
+    background-color: #ffffff;
+    border-radius: 5px;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.review h3 {
+    font-size: 18px;
+    color: #343a40;
+    margin-bottom: 5px;
+}
+
+.review blockquote {
+    font-style: italic;
+    color: #555;
+    margin: 10px 0;
+}
+
+.text-muted {
+    font-size: 16px;
+    font-style: italic;
+}
+
+/* Review Cards */
+.review-card {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 30px;
+}
+
+.card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.card-body {
+    flex-grow: 1;
+}
+
+.review-card:hover {
+    transform: scale(1.02);
+    box-shadow: 2px 2px 15px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease-in-out;
+}
+
+/* Buttons */
+.btn-primary {
+    display: block;
+    width: 200px;
+    margin: 0 auto;
+    padding: 12px 20px;
+    font-size: 16px;
+}
+
+.like-btn, 
+.delete-review-btn {
+    font-size: 14px;
+}
+
+/* Responsive Styling */
+@media (max-width: 768px) {
+    .review-card {
+        margin-bottom: 1.5rem;
+    }
+
+    .like-btn, 
+    .delete-review-btn {
+        width: 100%;
+    }
+}
+
+/* Images */
+.review-card img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 5px;
+}

@@ -1,0 +1,96 @@
+.animated {
+    animation-duration: 1s;
+    animation-fill-mode: both;
+}
+
+.fadeInUp {
+    animation-name: fadeInUp;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.carousel-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.8));
+}
+
+.btn-primary {
+    background-color: #007bff;
+    border: none;
+    transition: all 0.3s ease-in-out;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+}
+
+.card {
+    transition: all 0.3s ease-in-out;
+    background-color: var(--card-bg);
+    color: var(--text-color);
+}
+
+.card:hover {
+    transform: translateY(-4px);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+.limited-offer-badge {
+    font-size: 0.75rem;
+    font-weight: bold;
+    background: red;
+    padding: 5px 10px;
+    border-radius: 0 5px 5px 0;
+}
+
+input.form-control {
+    border-radius: 10px;
+    border: 1px solid #ccc;
+}
+
+input.form-control:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+:root {
+    --bg-color: #ffffff;
+    --text-color: #212529;
+    --card-bg: #f8f9fa;
+    --btn-bg: #007bff;
+    --btn-text: #ffffff;
+}
+
+.dark-mode {
+    --bg-color: #121212;
+    --text-color: #e0e0e0;
+    --card-bg: #1e1e1e;
+    --btn-bg: #0d6efd;
+    --btn-text: #ffffff;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    transition: all 0.3s ease-in-out;
+}
+
+.btn-primary {
+    background-color: var(--btn-bg);
+    color: var(--btn-text);
+}

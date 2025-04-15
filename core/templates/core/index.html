@@ -1,0 +1,264 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'style.css' %}">
+
+<!-- Hero Section with Animated Carousel -->
+<section class="pt-4">
+    <div id="heroCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel" data-bs-interval="4000">
+
+        <!-- Carousel Indicators -->
+        <div class="carousel-indicators">
+            {% for slide in slides %}
+            <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="{{ forloop.counter0 }}"
+                class="{% if forloop.first %}active{% endif %}" aria-label="Slide {{ forloop.counter }}">
+            </button>
+            {% endfor %}
+        </div>
+
+        <!-- Carousel Inner with Overlay -->
+        <div class="carousel-inner">
+            {% for slide in slides %}
+            <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                <!-- Dark Gradient Overlay -->
+                <div class="carousel-overlay"></div>
+                <img loading="lazy" src="{{ slide.image.url }}"
+                class="d-block w-100" alt="{{ slide.title }}"
+                style="height: 100vh; object-fit: cover; filter: brightness(0.7);">
+                
+                <!-- Caption Content -->
+                <div class="carousel-caption animated fadeInUp">
+                    <h3 class="fw-bold text-white display-6">{{ slide.title }}</h3>
+                    <p class="text-white d-none d-md-block">{{ slide.description }}</p>
+                    <a href="{% url 'destinations:destinations' %}" class="btn btn-primary btn-lg shadow px-4 py-2">🌍 Explore Now</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        
+        <!-- Custom Navigation Controls -->
+        <button class="carousel-control-prev custom-control" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        </button>
+        <button class="carousel-control-next custom-control" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        </button>
+    </div>
+</section>
+
+
+<!-- Offers Section with Hover Effects -->
+<section class="container-fluid mt-5" data-bs-theme="auto">
+    <!-- Offers Tabs Responsive -->
+    <div class="container-fluid px-2">
+        <!-- Small to Medium Screens: Horizontal Scroll -->
+        <div class="d-lg-none">
+            <div class="d-flex overflow-auto flex-nowrap gap-2 mb-4">
+                <ul class="nav nav-pills flex-nowrap">
+                    <li class="nav-item">
+                        <a class="nav-link active rounded-pill px-4 py-2" id="all-tab" data-bs-toggle="tab" href="#all-offers">All</a>
+                    </li>
+                    {% for category in categories %}
+                    <li class="nav-item">
+                        <a class="nav-link rounded-pill px-4 py-2" id="{{ category|lower }}-tab" data-bs-toggle="tab" href="#{{ category|lower }}">
+                            {{ category }}
+                        </a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+
+        <!-- Large Screens and Above: Original Justified Layout -->
+        <div class="d-none d-lg-block">
+            <ul class="nav nav-pills justify-content-center mb-4" id="offersTabs">
+                <li class="nav-item">
+                    <a class="nav-link active" id="all-tab-lg" data-bs-toggle="tab" href="#all-offers">All</a>
+                </li>
+                {% for category in categories %}
+                <li class="nav-item">
+                    <a class="nav-link" id="{{ category|lower }}-tab-lg" data-bs-toggle="tab" href="#{{ category|lower }}">
+                        {{ category }}
+                    </a>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <!-- Offers Grid -->
+    <div class="tab-content">
+        <div class="tab-pane fade show active" id="all-offers">
+            <div class="row g-4">
+                {% for offer in offers %}
+                <div class="col-12 col-md-6 col-lg-4">
+                    <div class="card mb-3 shadow-sm border-0 mx-auto h-100 bg-body text-body" style="max-width: 540px;">
+                        <div class="row g-0 h-100">
+                            <!-- Image Section -->
+                            <div class="col-md-4 position-relative">
+                                <img loading="lazy" src="{{ offer.img.url }}" class="img-fluid rounded-start w-100 h-100" 
+                                     alt="{{ offer.title }}" style="object-fit: cover; height: 180px;">
+                                <span class="position-absolute top-0 start-0 text-bg-danger px-2 py-1 rounded-bottom">
+                                    Limited Offer
+                                </span>
+                            </div>
+                            <!-- Content Section -->
+                            <div class="col-md-8 d-flex">
+                                <div class="card-body d-flex flex-column">
+                                    <h5 class="card-title fw-bold">{{ offer.title }}</h5>
+                                    <p class="card-text text-body-secondary flex-grow-1">{{ offer.description }}</p>
+                                    <a href="{% url 'confirm_offer_booking' offer.id %}" class="btn btn-primary btn-sm mt-auto shadow-sm">
+                                        Book Now
+                                    </a>                                                                     
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Category-Specific Offers -->
+        {% for category in categories %}
+        <div class="tab-pane fade" id="{{ category|lower }}">
+            <div class="row g-4">
+                {% for offer in offers %}
+                {% if offer.category == category %}
+                <div class="col-12 col-md-6 col-lg-4">
+                    <div class="card mb-3 shadow-sm border-0 mx-auto h-100 bg-body text-body" style="max-width: 540px;">
+                        <div class="row g-0 h-100">
+                            <!-- Image Section -->
+                            <div class="col-md-4 position-relative">
+                                <img loading="lazy" src="{{ offer.img.url }}" class="img-fluid rounded-start w-100 h-100" 
+                                     alt="{{ offer.title }}" style="object-fit: cover; height: 180px;">
+                                <span class="position-absolute top-0 start-0 text-bg-danger px-2 py-1 rounded-bottom">
+                                    Limited Offer
+                                </span>
+                            </div>
+                            <!-- Content Section -->
+                            <div class="col-md-8 d-flex">
+                                <div class="card-body d-flex flex-column">
+                                    <h5 class="card-title fw-bold">{{ offer.title }}</h5>
+                                    <p class="card-text text-body-secondary flex-grow-1">{{ offer.description }}</p>
+                                    <a href="#" class="btn btn-primary btn-sm mt-auto">Book Now</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+
+
+
+
+
+
+<!-- Call-to-Action Banner -->
+<section class="container-fluid my-5 p-5 text-center bg-primary text-white rounded shadow">
+    <h3 class="fw-bold">Plan Your Next Trip Now!</h3>
+    <p>Discover exclusive offers and unforgettable destinations.</p>
+    <a href="#" class="btn btn-light btn-lg fw-bold">Book Now</a>
+</section>
+
+<!-- App Download Section -->
+<section class="mt-5 py-4 text-center rounded shadow-sm">
+    <div class="container-fluid ">
+    <h4 class="fw-bold">
+        <i class="fa-solid fa-ticket pe-2 text-danger"></i> Download the App Now!
+    </h4>
+    <p>Use code <b>WELCOMEMMT</b> to get <b>FLAT 12% OFF*</b> on your first flight booking.</p>
+
+    
+        <div class="row">
+
+            <!-- Phone Number Input & Button -->
+            <div class="col-md-6 col-lg-4 d-flex flex-column flex-md-row align-items-center p-3 rounded shadow-sm">
+                <input class="form-control bg-transparent border-secondary text-center w-100 mb-2 mb-md-0 me-md-2" 
+       type="tel" name="phone" id="phone" placeholder="Enter Phone Number"
+       pattern="[0-9]{10}" title="Enter 10-digit phone number" style="max-width: 300px;">
+
+                <button class="btn btn-primary w-md-auto text-nowrap">Get App Link</button> 
+            </div>
+
+            <!-- App Store Links -->
+            <div class="col-md-6 col-lg-4 text-center mt-3 mt-md-0">
+                <a href="#" class="text-decoration-none d-inline-block mx-2">
+                    <i class="fa-brands fa-google-play fa-2x"></i>
+                    <span class="d-block fw-bold">Google Play</span>
+                </a>
+                <a href="#" class="text-decoration-none d-inline-block mx-2">
+                    <i class="fa-brands fa-apple fa-2x"></i>
+                    <span class="d-block fw-bold">App Store</span>
+                </a>
+            </div>
+        </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-5">
+    <div class="bg-transparent p-1">
+      <h5 class="fw-bold mb-4 text-center">VentureVista</h5>
+      <p class="text-muted small text-center mx-auto" style="max-width: 720px;">
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Quae ut numquam nesciunt, labore fuga eius iste esse!
+      </p>
+      <div class="row row-cols-1 row-cols-md-3 g-4 mt-4">
+  
+        <!-- About the Site -->
+        <div class="col">
+          <h6 class="fw-bold"><i class="fas fa-info-circle me-2"></i>About the Site</h6>
+          <ul class="list-unstyled small">
+            <li><a href="#" class="text-decoration-none link-secondary d-block py-1">Customer Support</a></li>
+            <li><a href="#" class="text-decoration-none link-secondary d-block py-1">Privacy Policy</a></li>
+            <li><a href="#" class="text-decoration-none link-secondary d-block py-1">Cookie Policy</a></li>
+            <li><a href="#" class="text-decoration-none link-secondary d-block py-1">User Agreement</a></li>
+            <li><a href="#" class="text-decoration-none link-secondary d-block py-1">Terms of Service</a></li>
+          </ul>
+        </div>
+  
+        <!-- Company Info -->
+        <div class="col">
+          <h6 class="fw-bold"><i class="fas fa-building me-2"></i>Company Info</h6>
+          <ul class="list-unstyled small">
+            <li><a href="#" class="text-decoration-none link-secondary d-block py-1">MMT Black Loyalty Program</a></li>
+            <li><a href="#" class="text-decoration-none link-secondary d-block py-1">Payment Security</a></li>
+            <li><a href="#" class="text-decoration-none link-secondary d-block py-1">Franchise Offices</a></li>
+            <li><a href="#" class="text-decoration-none link-secondary d-block py-1">Make A Payment</a></li>
+            <li><a href="#" class="text-decoration-none link-secondary d-block py-1">Work From Home</a></li>
+          </ul>
+        </div>
+  
+        <!-- Quick Links -->
+        <div class="col">
+          <h6 class="fw-bold"><i class="fas fa-plane me-2"></i>Quick Links</h6>
+          <ul class="list-unstyled small">
+            <li><a href="#" class="text-decoration-none link-secondary d-block py-1">Air India</a></li>
+            <li><a href="#" class="text-decoration-none link-secondary d-block py-1">SpiceJet</a></li>
+            <li><a href="#" class="text-decoration-none link-secondary d-block py-1">Vistara</a></li>
+            <li><a href="#" class="text-decoration-none link-secondary d-block py-1">Goa Delhi Flights</a></li>
+            <li><a href="#" class="text-decoration-none link-secondary d-block py-1">Delhi Mumbai Flights</a></li>
+          </ul>
+        </div>
+  
+      </div>
+    </div>
+  </section>
+  
+  
+  
+
+
+
+
+
+<script src="{% static 'script.js' %}"></script>
+{% endblock %}
