@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-(nu=qsqa8r!=*m%yn6#2zr(_6bpr3jrzlc5p61n!1a$v26g#k#
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['Karan2001.pythonanywhere.com']
 
 
 # Application definition
@@ -89,17 +89,17 @@ WSGI_APPLICATION = 'VentureVista.wsgi.application'
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
-    
+
 }'''
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'venturevista',
-        'USER': 'root',
+        'NAME': 'Karan2001$venturevista',
+        'USER': 'Karan2001',
         'PASSWORD': 'beetroot',
-        'HOST': 'localhost',  
-        'PORT': '3306',  
+        'HOST': 'Karan2001.mysql.pythonanywhere-services.com',
+        'PORT': '3306',
     }
 }
 
